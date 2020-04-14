@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -150,10 +151,32 @@ public class RSAUserInterface extends JFrame {
 
         String filePath = getFilePathFromLabel(keyFilePath);
 
+        if (fileIsADirectory(filePath)) {
+            filePath += UIConstants.KEY_FILE;
+            createKeysStorageFile(filePath);
+            keyFilePath.setText(UIConstants.KEY_FILE_PATH_LABEL + filePath);
+        }
+
         fileHandler.writeToFile(filePath, keyPairData);
         keyPairsGenerated = true;
         refreshRSAButtons();
     }
+
+    private boolean fileIsADirectory(String filePath) {
+        File file = new File(filePath);
+
+        return file.isDirectory();
+    }
+
+    private void createKeysStorageFile(String filePath) {
+        File file = new File(filePath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void setUpFileChoosingButtons() {
         enterSourceFilePathButton = new JButton("Choose Source File Path");
@@ -173,7 +196,7 @@ public class RSAUserInterface extends JFrame {
 
     private void performSourceButtonAction() {
         try {
-            String filePath = chooseFilePath();
+            String filePath = chooseFilePath(JFileChooser.FILES_ONLY);
             sourceFilePath.setText(UIConstants.SOURCE_FILE_PATH_LABEL + filePath);
             sourceFilePathChosen = true;
 
@@ -185,7 +208,7 @@ public class RSAUserInterface extends JFrame {
 
     private void performDestinationButtonAction() {
         try {
-            String filePath = chooseFilePath();
+            String filePath = chooseFilePath(JFileChooser.DIRECTORIES_ONLY);
             destinationFilePath.setText(UIConstants.DESTINATION_FILE_PATH_LABEL + filePath);
             destinationFilePathChosen = true;
 
@@ -197,7 +220,7 @@ public class RSAUserInterface extends JFrame {
 
     private void performKeyButtonAction() {
         try {
-            String filePath = chooseFilePath();
+            String filePath = chooseFilePath(JFileChooser.FILES_AND_DIRECTORIES);
             keyFilePath.setText(UIConstants.KEY_FILE_PATH_LABEL + filePath);
             keyFilePathChosen = true;
             fileHandler = new FileHandler(getFilePathFromLabel(keyFilePath));
@@ -208,9 +231,9 @@ public class RSAUserInterface extends JFrame {
         }
     }
 
-    private String chooseFilePath() throws PathNotChosenException {
+    private String chooseFilePath(int fileSelectionMode) throws PathNotChosenException {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileSelectionMode(fileSelectionMode);
 
         int chosenOption = fileChooser.showOpenDialog(null);
         File directoryPath = fileChooser.getSelectedFile();

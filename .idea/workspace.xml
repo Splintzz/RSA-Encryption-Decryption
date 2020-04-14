@@ -4,10 +4,9 @@
     <list default="true" id="34874427-21b9-436e-b1d6-8d62131be904" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/RSA/FileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RSA/FileHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RSA/RSADecrypt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RSA/RSADecrypt.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/RSA/RSAUserInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/RSA/RSAUserInterface.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FileHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RSAUserInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RSAUserInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UIConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UIConstants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,26 +70,26 @@
     </state>
     <state x="453" y="120" key="#com.intellij.ide.util.MemberChooser/0.23.1280.749@0.23.1280.749" timestamp="1586475437979" />
     <state x="595" y="152" key="#com.intellij.ide.util.MemberChooser/0.23.1680.999@0.23.1680.999" timestamp="1586566277681" />
-    <state width="1638" height="155" key="GridCell.Tab.0.bottom" timestamp="1586817868897">
+    <state width="1638" height="155" key="GridCell.Tab.0.bottom" timestamp="1586893276747">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state width="1238" height="81" key="GridCell.Tab.0.bottom/0.23.1280.749@0.23.1280.749" timestamp="1586479042086" />
-    <state width="1638" height="155" key="GridCell.Tab.0.bottom/0.23.1680.999@0.23.1680.999" timestamp="1586817868897" />
-    <state width="1638" height="155" key="GridCell.Tab.0.center" timestamp="1586817868896">
+    <state width="1638" height="155" key="GridCell.Tab.0.bottom/0.23.1680.999@0.23.1680.999" timestamp="1586893276747" />
+    <state width="1638" height="155" key="GridCell.Tab.0.center" timestamp="1586893276746">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state width="1238" height="81" key="GridCell.Tab.0.center/0.23.1280.749@0.23.1280.749" timestamp="1586479042085" />
-    <state width="1638" height="155" key="GridCell.Tab.0.center/0.23.1680.999@0.23.1680.999" timestamp="1586817868896" />
-    <state width="1638" height="155" key="GridCell.Tab.0.left" timestamp="1586817868896">
+    <state width="1638" height="155" key="GridCell.Tab.0.center/0.23.1680.999@0.23.1680.999" timestamp="1586893276746" />
+    <state width="1638" height="155" key="GridCell.Tab.0.left" timestamp="1586893276745">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state width="1238" height="81" key="GridCell.Tab.0.left/0.23.1280.749@0.23.1280.749" timestamp="1586479042085" />
-    <state width="1638" height="155" key="GridCell.Tab.0.left/0.23.1680.999@0.23.1680.999" timestamp="1586817868896" />
-    <state width="1638" height="155" key="GridCell.Tab.0.right" timestamp="1586817868897">
+    <state width="1638" height="155" key="GridCell.Tab.0.left/0.23.1680.999@0.23.1680.999" timestamp="1586893276745" />
+    <state width="1638" height="155" key="GridCell.Tab.0.right" timestamp="1586893276747">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state width="1238" height="81" key="GridCell.Tab.0.right/0.23.1280.749@0.23.1280.749" timestamp="1586479042086" />
-    <state width="1638" height="155" key="GridCell.Tab.0.right/0.23.1680.999@0.23.1680.999" timestamp="1586817868897" />
+    <state width="1638" height="155" key="GridCell.Tab.0.right/0.23.1680.999@0.23.1680.999" timestamp="1586893276747" />
     <state width="1638" height="334" key="GridCell.Tab.1.bottom" timestamp="1586569148139">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
@@ -107,10 +106,24 @@
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state width="1638" height="334" key="GridCell.Tab.1.right/0.23.1680.999@0.23.1680.999" timestamp="1586569148138" />
-    <state x="416" y="299" key="com.intellij.ide.util.TipDialog" timestamp="1586805764449">
+    <state x="416" y="299" key="com.intellij.ide.util.TipDialog" timestamp="1586891775930">
       <screen x="0" y="23" width="1680" height="999" />
     </state>
     <state x="317" y="230" key="com.intellij.ide.util.TipDialog/0.23.1280.749@0.23.1280.749" timestamp="1586472636672" />
-    <state x="416" y="299" key="com.intellij.ide.util.TipDialog/0.23.1680.999@0.23.1680.999" timestamp="1586805764449" />
+    <state x="416" y="299" key="com.intellij.ide.util.TipDialog/0.23.1680.999@0.23.1680.999" timestamp="1586891775930" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/RSAUserInterface.java</url>
+          <line>142</line>
+          <properties class="RSAUserInterface" method="performKeyGeneration">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
