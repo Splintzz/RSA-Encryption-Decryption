@@ -20,6 +20,9 @@ public class RSAUserInterface extends JFrame {
 
     private boolean sourceFilePathChosen = false, destinationFilePathChosen = false, keyFilePathChosen = false;
     private boolean keyPairsGenerated = false;
+    private boolean encryptionPerformed = false;
+
+    private String fileExtensionOfEncryptedFile = null;
 
     public RSAUserInterface() {
         super();
@@ -76,13 +79,7 @@ public class RSAUserInterface extends JFrame {
         generateKeyButton.setEnabled(false);
 
         encryptOrDecryptButton.addActionListener(e -> {
-            if (encryptSetting.isSelected()) {
-                System.out.println("Performing Encrypt");
-                performEncrypt();
-            }else {
-                System.out.println("Performing Decrypt");
-                performDecrypt();
-            }
+            handleEncryptDecryptButton(encryptSetting.isSelected());
         });
 
         generateKeyButton.addActionListener(e -> {
@@ -90,54 +87,86 @@ public class RSAUserInterface extends JFrame {
         });
     }
 
-    private void performEncrypt() {
-        System.out.println();
+    private void handleEncryptDecryptButton(boolean encrypting) {
         String readSourceFilePath = getFilePathFromLabel(sourceFilePath);
-        String writeSourceFilePath = getFilePathFromLabel(destinationFilePath);
 
-        byte[] bytes = fileHandler.getFileBytes(readSourceFilePath);
-        System.out.print("Bytes read into encrypted file: ");
-        for (byte b : bytes) {
-            System.out.print(b);
+        try {
+            byte[] bytes = fileHandler.getFileBytes(readSourceFilePath);
+            BigInteger fileBytes = new BigInteger(bytes);
+
+            String writeSourceFilePath = getFilePathFromLabel(destinationFilePath);
+
+            if (encrypting) {
+                performEncrypt(fileBytes, writeSourceFilePath, readSourceFilePath);
+            }else {
+                performDecrypt(fileBytes, writeSourceFilePath);
+            }
+        } catch (FileTooBigError fileTooBigError) {
+            System.out.println("Caught");
+            JOptionPane.showMessageDialog(null, "The selected file is too big to encrypt. Must be 128 bytes or below.", "ERROR", JOptionPane.CANCEL_OPTION);
+            return;
         }
-        System.out.println();
-        BigInteger fileBytes = new BigInteger(bytes);
+    }
+
+    private void performEncrypt(BigInteger fileBytes, String writeSourceFilePath, String readSourceFilePath) {
+        createDestinationFile(writeSourceFilePath, getDestinationFileExtension(true));
+        writeSourceFilePath = getFilePathFromLabel(destinationFilePath);
+
         KeyPair publicKeyPair = fileHandler.getPublicKeyPair();
         BigInteger publicExponent = publicKeyPair.getExponent();
         BigInteger modulus = publicKeyPair.getModulus();
 
-        System.out.println("File bytes: " + fileBytes);
-        System.out.println("E = " + publicExponent);
-        System.out.println("N = " + modulus);
-
         encryptor.encrypt(fileBytes, publicExponent, modulus);
 
         fileHandler.writeToFile(writeSourceFilePath, encryptor.getEncryptedMessage());
+
+        updateFileExtensionOfEncryptedFile(readSourceFilePath);
+        encryptionPerformed = true;
     }
 
-    private void performDecrypt() {
-        System.out.println();
-        String readSourceFilePath = getFilePathFromLabel(sourceFilePath);
-        String writeSourceFilePath = getFilePathFromLabel(destinationFilePath);
-
-        byte[] bytes = fileHandler.getFileBytes(readSourceFilePath);
-        System.out.print("Bytes read from encrypted file: ");
-        for (byte b : bytes) {
-            System.out.print(b);
+    private void performDecrypt(BigInteger fileBytes, String writeSourceFilePath) {
+        if (!encryptionPerformed) {
+            JOptionPane.showMessageDialog(null, "Encryption was never performed, or was reset.", "ERROR", JOptionPane.CANCEL_OPTION);
+            return;
         }
-        System.out.println();
-        BigInteger fileBytes = new BigInteger(bytes);
+        createDestinationFile(writeSourceFilePath, getDestinationFileExtension(false));
+        writeSourceFilePath = getFilePathFromLabel(destinationFilePath);
+
         KeyPair privateKeyPair = fileHandler.getPrivateKeyPair();
         BigInteger privateExponent = privateKeyPair.getExponent();
         BigInteger modulus = privateKeyPair.getModulus();
 
-        System.out.println("File bytes: " + fileBytes);
-        System.out.println("E = " + privateExponent);
-        System.out.println("D = " + modulus);
-
         decryptor.decrypt(fileBytes, privateExponent, modulus);
 
         fileHandler.writeToFile(writeSourceFilePath, decryptor.getDecryptedMessage());
+
+        encryptionPerformed = false;
+    }
+
+    private void createDestinationFile(String filePath, String fileExtension) {
+        File destinationFile = new File(filePath + UIConstants.DESTINATION_FILE_NAME + fileExtension);
+
+        try {
+            destinationFile.createNewFile();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Unable to create destination file.", "ERROR", JOptionPane.CANCEL_OPTION);
+            return;
+        }
+        destinationFilePath.setText(UIConstants.DESTINATION_FILE_PATH_LABEL + destinationFile.getAbsolutePath());
+    }
+
+    private String getDestinationFileExtension(boolean encrypting) {
+        if (encrypting) {
+            return UIConstants.ENCRYPTION_FILE_EXTENSION;
+        }
+
+        return fileExtensionOfEncryptedFile;
+    }
+
+    private void updateFileExtensionOfEncryptedFile(String filePath) {
+        int startOfFileExtension = filePath.indexOf(".");
+
+        fileExtensionOfEncryptedFile = filePath.substring(startOfFileExtension);
     }
 
     private void performKeyGeneration() {
@@ -157,8 +186,10 @@ public class RSAUserInterface extends JFrame {
             keyFilePath.setText(UIConstants.KEY_FILE_PATH_LABEL + filePath);
         }
 
+        fileHandler = new FileHandler(getFilePathFromLabel(keyFilePath));
         fileHandler.writeToFile(filePath, keyPairData);
         keyPairsGenerated = true;
+
         refreshRSAButtons();
     }
 
@@ -173,10 +204,10 @@ public class RSAUserInterface extends JFrame {
         try {
             file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Unable to create key storage file.", "ERROR", JOptionPane.CANCEL_OPTION);
+            return;
         }
     }
-
 
     private void setUpFileChoosingButtons() {
         enterSourceFilePathButton = new JButton("Choose Source File Path");
@@ -202,7 +233,7 @@ public class RSAUserInterface extends JFrame {
 
             refreshRSAButtons();
         }catch (PathNotChosenException exc) {
-            System.exit(-1);
+            return;
         }
     }
 
@@ -214,7 +245,7 @@ public class RSAUserInterface extends JFrame {
 
             refreshRSAButtons();
         }catch (PathNotChosenException exc) {
-            System.exit(-1);
+            return;
         }
     }
 
@@ -223,11 +254,10 @@ public class RSAUserInterface extends JFrame {
             String filePath = chooseFilePath(JFileChooser.FILES_AND_DIRECTORIES);
             keyFilePath.setText(UIConstants.KEY_FILE_PATH_LABEL + filePath);
             keyFilePathChosen = true;
-            fileHandler = new FileHandler(getFilePathFromLabel(keyFilePath));
 
             refreshRSAButtons();
         }catch (PathNotChosenException exc) {
-            //TODO: Handle this shit
+            return;
         }
     }
 
@@ -274,9 +304,9 @@ public class RSAUserInterface extends JFrame {
     }
 
     private void setUpDestinationView() {
-        sourceFilePath = new JLabel(UIConstants.SOURCE_FILE_PATH_LABEL + "(not chosen yet)");
-        destinationFilePath = new JLabel(UIConstants.DESTINATION_FILE_PATH_LABEL + "(not chosen yet)");
-        keyFilePath = new JLabel(UIConstants.KEY_FILE_PATH_LABEL + "(not chosen yet)");
+        sourceFilePath = new JLabel(UIConstants.SOURCE_FILE_PATH_LABEL + UIConstants.EMPTY_PATH_LABEL);
+        destinationFilePath = new JLabel(UIConstants.DESTINATION_FILE_PATH_LABEL + UIConstants.EMPTY_PATH_LABEL);
+        keyFilePath = new JLabel(UIConstants.KEY_FILE_PATH_LABEL + UIConstants.EMPTY_PATH_LABEL);
 
         JPanel pathPanel = new JPanel();
         pathPanel.setVisible(true);
@@ -299,7 +329,6 @@ public class RSAUserInterface extends JFrame {
             filePath = filePathLabel.getText().substring(UIConstants.SOURCE_FILE_PATH_LABEL.length());
         }
 
-        System.out.println("File path is: "+filePath);
         return filePath;
     }
 

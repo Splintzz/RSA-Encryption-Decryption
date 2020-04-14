@@ -29,6 +29,7 @@ public class FileHandler {
 
     public void writeToFile(String filePath, BigInteger data) {
         File file = new File(filePath);
+
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
             System.out.println("Big int before byte array = " + data);
@@ -45,12 +46,17 @@ public class FileHandler {
         }
     }
 
-    public byte[] getFileBytes(String filePath) {
+    public byte[] getFileBytes(String filePath) throws FileTooBigError {
         byte[] fileBytes = null;
 
+        File file = new File(filePath);
+        int numberOfBytesToRead = (int)file.length();
+
+        if (numberOfBytesToRead > RSAConstants.MAX_FILE_SIZE) {
+            System.out.println("Too big");
+            throw new FileTooBigError();
+        }
         try {
-            File file = new File(filePath);
-            int numberOfBytesToRead = (int)file.length();
             FileInputStream byteReader = new FileInputStream(file);
             fileBytes = new byte[numberOfBytesToRead];
 
