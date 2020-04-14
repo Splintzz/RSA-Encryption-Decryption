@@ -9,8 +9,6 @@ public class RSAEncrypt {
 
     public void encrypt(BigInteger message, BigInteger publicExponent, BigInteger modulus) {
         encryptedMessage = message.modPow(publicExponent, modulus);
-
-        System.out.println("Encrypted Message: " + encryptedMessage);
     }
 
     public BigInteger getEncryptedMessage() {

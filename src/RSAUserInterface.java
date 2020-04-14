@@ -102,9 +102,10 @@ public class RSAUserInterface extends JFrame {
                 performDecrypt(fileBytes, writeSourceFilePath);
             }
         } catch (FileTooBigError fileTooBigError) {
-            System.out.println("Caught");
             JOptionPane.showMessageDialog(null, "The selected file is too big to encrypt. Must be 128 bytes or below.", "ERROR", JOptionPane.CANCEL_OPTION);
             return;
+        }finally {
+            resetEncryptionAndDecryptionState();
         }
     }
 
@@ -141,6 +142,16 @@ public class RSAUserInterface extends JFrame {
         fileHandler.writeToFile(writeSourceFilePath, decryptor.getDecryptedMessage());
 
         encryptionPerformed = false;
+    }
+
+    private void resetEncryptionAndDecryptionState() {
+        sourceFilePath.setText(UIConstants.SOURCE_FILE_PATH_LABEL + UIConstants.EMPTY_PATH_LABEL);
+        destinationFilePath.setText(UIConstants.DESTINATION_FILE_PATH_LABEL + UIConstants.EMPTY_PATH_LABEL);
+
+        sourceFilePathChosen = false;
+        destinationFilePathChosen = false;
+
+        refreshRSAButtons();
     }
 
     private void createDestinationFile(String filePath, String fileExtension) {
@@ -338,7 +349,11 @@ public class RSAUserInterface extends JFrame {
 
             if (keyPairsGenerated && sourceFilePathChosen && destinationFilePathChosen) {
                 encryptOrDecryptButton.setEnabled(true);
+            }else {
+                encryptOrDecryptButton.setEnabled(false);
             }
+        }else {
+            encryptOrDecryptButton.setEnabled(false);
         }
     }
 }

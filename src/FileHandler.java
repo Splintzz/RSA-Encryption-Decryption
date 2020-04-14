@@ -32,13 +32,8 @@ public class FileHandler {
 
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
-            System.out.println("Big int before byte array = " + data);
             outputStream.write(data.toByteArray());
-            System.out.print("Bytes read into file: ");
-            for (byte b : data.toByteArray()) {
-                System.out.print(b);
-            }
-            System.out.println();
+
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
@@ -53,15 +48,13 @@ public class FileHandler {
         int numberOfBytesToRead = (int)file.length();
 
         if (numberOfBytesToRead > RSAConstants.MAX_FILE_SIZE) {
-            System.out.println("Too big");
             throw new FileTooBigError();
         }
         try {
             FileInputStream byteReader = new FileInputStream(file);
             fileBytes = new byte[numberOfBytesToRead];
 
-            int read = byteReader.read(fileBytes);
-            System.out.println("READ: " + read + " bytes");
+            byteReader.read(fileBytes);
 
             byteReader.close();
         } catch (Exception e) {
