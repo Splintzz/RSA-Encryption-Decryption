@@ -3,7 +3,7 @@
 Start-Up:
 1) Open the command line
 2) cd into the source code folder
-3) run “java *.java” on the command line
+3) run “javac *.java” on the command line
 4) run “java Main” on the command line
 5) If you are having trouble with the GUI, below is a guide to running through the encryption and decryption process
 
@@ -34,7 +34,7 @@ Side Notes:
 Decrypt File
 1) Start by clicking the “Decrypt” radio button
 2) Click the “Choose Destination File Path” button and select a directory
-3) Click the “Choose Source File Path” and select a file
+3) Click the “Choose Source File Path” and select a the file that was just produced as a result of the enryption
 4) At this point, the “Decrypt” button should be enabled, click that button
 
 Side Notes
